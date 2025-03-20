@@ -6,7 +6,7 @@ With buffering in place, the function reads the request line by line using the l
 
 REFLECTION 2
 
-![Commit 2](images/commit2.png)
+![Commit 2 screen capture](image/commit2.png)
 
 This function operates similarly to handle_connection but introduces a crucial addition. After reading the incoming request, it constructs an HTTP response that includes a status line with the HTTP version, status code, and message. It also specifies the content length, indicating how much data will be sent, followed by the HTML content intended for the browser.
 
@@ -14,7 +14,7 @@ To build this response, the function defines each component as a separate string
 
 REFLECTION 3
 
-![Commit 2](images/commit3.png)
+![Commit 3 screen capture](image/commit3.png)
 
 The main goal of validation here is to inspect the status line, specifically focusing on the URI—the second element in the request line. This part contains the path of the requested resource and helps identify what the client is asking for.
 
@@ -24,7 +24,11 @@ REFLECTION 4
 
 After executing and reviewing the code, I observed that the redirection to the hello.html page was noticeably slow. This slowdown was caused by the presence of a sleep function in the code, which tied up system resources and delayed the handling of my original request. While the program was sleeping, the request was placed in a queue, causing a wait time. As a result, the response was delayed, and the page load felt sluggish because the server couldn't process other requests until the sleep duration ended.
 
+REFLECTION 5
 
+Integrating multithreading into the application greatly enhanced its performance by enabling the use of worker threads to handle incoming requests in parallel. This means multiple requests can be processed at the same time, removing the bottleneck caused by the sleep function, which previously delayed other requests.
+
+The implementation starts by setting up a communication channel for passing tasks to threads. A thread pool is then created with multiple workers—each one dedicated to handling a single request. When a request is received, it's wrapped in a function, placed in a Box, and sent to a worker. The worker locks onto the task until it's done. In this case, four worker threads are used, and for each incoming stream from the TCPListener, the thread pool runs the handle_connection function to manage the request.
 
 
 
