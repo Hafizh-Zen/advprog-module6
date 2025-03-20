@@ -6,7 +6,7 @@ With buffering in place, the function reads the request line by line using the l
 
 REFLECTION 2
 
-![Commit 2](/images/commit2.png)
+![Commit 2](images/commit2.png)
 
 This function operates similarly to handle_connection but introduces a crucial addition. After reading the incoming request, it constructs an HTTP response that includes a status line with the HTTP version, status code, and message. It also specifies the content length, indicating how much data will be sent, followed by the HTML content intended for the browser.
 
